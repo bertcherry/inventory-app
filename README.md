@@ -1,0 +1,1 @@
+Inventory management app from The Odin Project to practice using express and database connection
