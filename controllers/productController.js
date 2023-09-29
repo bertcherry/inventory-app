@@ -17,7 +17,11 @@ exports.index = asyncHandler(async (req, res, next) => {
 });
 
 exports.product_list = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented - product list');
+    const allProducts = await Product.find({}, 'name category')
+        .sort({ name: 1 })
+        .populate('category')
+        .exec();
+    res.render('product_list', { title: 'Product List', product_list: allProducts });
 });
 
 exports.product_detail = asyncHandler(async (req, res, next) => {
