@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <%- include('partials/header') -%>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2">
+          <%- include('partials/sidebar') -%>
+        </div>
+        <div class="col-sm-10">
+          <h1><%= title %></h1>
+          <p><strong>Category:</strong> <% product.category.forEach((val, index) => { %>
+            <a href="<%= val.url %>"><%= val.name %></a>
+            <% if (index < product.category.length - 1) { %>
+                <span>,</span>
+            <% }}) %>
+          </p>
+          <p><strong>Price:</strong> $<%= product.price %></p>
+          <p><strong>Quantity in Stock:</strong> $<%= product.quantity_in_stock %></p>
+          <p><strong>Description:</strong> <%= product.description %></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
