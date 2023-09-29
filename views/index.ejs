@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
+  <%- include('partials/header') -%>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2">
+          <%- include('partials/sidebar') -%>
+        </div>
+        <div class="col-sm-10">
+          <h1><%= title %></h1>
+          <p>Welcome to the <em>Hot Cherry Patterns</em> inventory management application.</p>
+          <p>The inventory has the following record counts:</p>
+          <ul>
+            <li><strong>Categories:</strong> <%= category_count %></li>
+            <li><strong>Products:</strong> <%= product_count %></li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
