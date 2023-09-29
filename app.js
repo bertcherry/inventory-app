@@ -8,7 +8,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const mongoose = require('mongoose');
-import { mongoDB } from 'db_connect';
+const mongoDB = require('./db_connect');
 mongoose.set('strictQuery', false);
 main().catch((err) => console.log(err));
 async function main() {
