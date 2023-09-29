@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <%- include('partials/header') -%>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2">
+          <%- include('partials/sidebar') -%>
+        </div>
+        <div class="col-sm-10">
+          <h1><%= title %></h1>
+          <ul>
+            <% if(product_list.length > 0) {product_list.forEach(product => { %>
+                <li><a href="<%= product.url %>"><%= product.name %></a> (<% product.category.forEach((val, index) => { %>
+                    <%= val.name %>
+                    <% if (index < product.category.length - 1) { %>
+                        <span>,</span>
+                    <% }}) %>
+                )</li>
+            <% })} else { %>
+                <li>There are no products.</li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
