@@ -5,8 +5,16 @@ const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 
 exports.index = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented - overall inventory index')
-})
+    const [numCategories, numProducts] = await Promise.all([
+        Category.countDocuments({}).exec(),
+        Product.countDocuments({}).exec()
+    ]);
+    res.render('index', {
+        title: 'Inventory Management',
+        category_count: numCategories,
+        product_count: numProducts
+    });
+});
 
 exports.product_list = asyncHandler(async (req, res, next) => {
     res.send('Not implemented - product list');
