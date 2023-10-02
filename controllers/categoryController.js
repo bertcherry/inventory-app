@@ -95,9 +95,37 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.category_update_get = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented - category update get');
+    const category = await Category.findById(req.params.id).exec();
+    if (category === null) {
+        const err = new Error('Category not found');
+        err.status = 404;
+        return next(err);
+    }
+    res.render('category_form', {
+        title: 'Update Category',
+        category,
+    });
 });
 
-exports.category_update_post = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented - category update post');
-});
+exports.category_update_post = [
+    body('name', 'Name must not be empty.').trim().isLength({ min: 1 }).escape(),
+
+    asyncHandler(async(req, res, next) => {
+        const errors = validationResult(req);
+        const category = new Category({
+            name: req.body.name,
+            _id: req.params.id,
+        });
+
+        if (!errors.isEmpty()) {
+            res.render('category_form', {
+                title: 'Update Category',
+                category,
+                errors: errors.array()
+            });
+        } else {
+            const updatedCategory = await Category.findByIdAndUpdate(req.params.id, category, {});
+            res.redirect(updatedCategory.url);
+        }
+    }),
+];
