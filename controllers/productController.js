@@ -106,9 +106,70 @@ exports.product_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.product_update_get = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented - product update get');
+    const [product, allCategories] = await Promise.all([
+        Product.findById(req.params.id).populate('category').exec(),
+        Category.find().exec(),
+    ]);
+    if (category === null) {
+        const err = new Error('Product not found');
+        err.status = 404;
+        return next(err);
+    }
+    for (const category of allCategories) {
+        for (const product_c of product.category) {
+            if (category._id.toString() === product_c._id.toString()) {
+                category.checked = 'true';
+            }
+        }
+    }
+    res.render('product_form', {
+        title: 'Update Product',
+        categories: allCategories,
+        product,
+    });
 });
 
-exports.product_update_post = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented - product update post');
-});
+exports.product_update_post = [
+    (req, res, next) => {
+        if(!(req.body.category instanceof Array)) {
+            if (typeof req.body.category === 'undefined') req.body.category = [];
+            else req.body.category = new Array(req.body.category);
+        }
+        next();
+    },
+    body('name', 'Name must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('description', 'Description must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('price', 'Price must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('quantity_in_stock', 'Quantity in stock must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('category.*', 'Product must be in at least one category.').isLength({ min: 1 }).escape(),
+
+    asyncHandler(async(req, res, next) => {
+        const errors = validationResult(req);
+        const product = new Product({
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            quantity_in_stock: req.body.quantity_in_stock,
+            category: req.body.category,
+            _id: req.params.id,
+        });
+
+        if (!errors.isEmpty()) {
+            const allCategories = await Category.find().exec();
+            for (const category of allCategories) {
+                if (product.category.includes(category._id)) {
+                    category.checked = 'true';
+                }
+            }
+            res.render('product_form', {
+                title: 'Update Product',
+                categories: allCategories,
+                product,
+                errors: errors.array()
+            });
+        } else {
+            const updatedProduct = await Product.findByIdAndUpdate(req.params.id, product, {});
+            res.redirect(updatedProduct.url);
+        }
+    }),
+];
