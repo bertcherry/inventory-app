@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <%- include('partials/header') -%>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2">
+          <%- include('partials/sidebar') -%>
+        </div>
+        <div class="col-sm-10">
+          <h1><%= title %></h1>
+          <form action="" method="post">
+            <div class="form-group">
+                <label for="name">Name: <input type="text" id="name" name="name" class="form-control" placeholder="Name of product" value="<%= typeof product!='undefined' ? product.name : '' %>" required></label>
+            </div>
+            <div class="form-group">
+                <label for="description">Description: <input type="text" id="description" name="description" class="form-control" placeholder="Description of product" value="<%= typeof product!='undefined' ? product.description : '' %>" required></label>
+            </div>
+            <div class="form-group">
+                <label for="category">Category: 
+                    <div>
+                        <% categories.forEach(category => { %>
+                            <div style="display:inline; padding-right:10px;">
+                                <input type="checkbox" class="checkbox-input" name="category" id="<%= category._id %>" value="<%= category._id %>" <%= typeof book==='undefined' ? '' : category.checked %>>
+                                <label for="<%= category._id %>"><%= category.name %></label>
+                            </div>
+                        <% }); %>
+                    </div>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="price">Price: <input type="number" id="price" name="price" class="form-control" value="<%= typeof product!='undefined' ? product.price : '' %>" required></label>
+            </div>
+            <div class="form-group">
+                <label for="quantity_in_stock">Quantity in Stock: <input type="number" id="quantity_in_stock" name="quantity_in_stock" class="form-control" value="<%= typeof product!='undefined' ? product.quantity_in_stock : '' %>" required></label>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit</button>
+          </form>
+          <ul>
+            <% if (typeof errors!='undefined') {errors.forEach(error => { %>
+              <li><%= error.msg %></li>
+            <% })} %>
+            </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
