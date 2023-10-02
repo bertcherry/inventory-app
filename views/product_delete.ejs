@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <%- include('partials/header') -%>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2">
+          <%- include('partials/sidebar') -%>
+        </div>
+        <div class="col-sm-10">
+          <h1><%= title %>: <%= product.name %></h1>
+          <p>Do you really want to delete this product?</p>
+          <form action="" method="post">
+            <div class="form-group">
+                <input type="hidden" id="productid" class="form-control" name="productid" required value="<%= product._id %>">
+                <button type="submit" class="btn btn-primary">Delete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -90,11 +90,19 @@ exports.product_create_post = [
 ];
 
 exports.product_delete_get = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented - product delete get');
+    const product = await Product.findById(req.params.id).populate('category').exec();
+    if (product === null) {
+        res.redirect('/inventory/products');
+    }
+    res.render('product_delete', {
+        title: 'Delete Product',
+        product,
+    });
 });
 
 exports.product_delete_post = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented - product delete post');
+    await Product.findByIdAndRemove(req.body.productid);
+    res.redirect('/inventory/products');
 });
 
 exports.product_update_get = asyncHandler(async (req, res, next) => {
